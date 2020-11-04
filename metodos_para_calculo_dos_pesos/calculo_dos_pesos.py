@@ -1,13 +1,11 @@
-class CalculoDosPesos():
-    def __init__(self, valor_passo, entrada_1, entrada_2, padrao_a_ser_obtido):
+class CalculoDosPesos:
+    def __init__(self, valor_passo, entrada_1, entrada_2, peso_1, peso_2, padrao_a_ser_obtido):
         self.entrada_1 = entrada_1
         self.entrada_2 = entrada_2
-        self.peso_1 = 0
-        self.peso_2 = 0
+        self.peso_1 = peso_1
+        self.peso_2 = peso_2
         self.padrao_a_ser_obtido = padrao_a_ser_obtido
-        # self.resultado_do_modelo_no_momento = resultado_do_modelo_no_momento
         self.bias = 0
-        # self.erro = 0
         self.valor_passo = valor_passo
 
     def valor_do_passo(self):
