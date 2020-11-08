@@ -1,4 +1,2 @@
 
-spython:S1854 "TRemove this assignment to local variable 'variacao_peso_1'; the value is never used.(€Ž’ü8¥ôª˜×.
-rpython:S1854!"TRemove this assignment to local variable 'variacao_peso_2'; the value is never used.(¨õÎ#8¥ôª˜×.
-}python:S1186#"YAdd a nested comment explaining why this method is empty, or complete the implementation.(æ–øþýÿÿÿÿ8¼Êó–×.
+Bpython:S125"Remove this commented out code.(ÙÆ²ðúÿÿÿÿ8ˆ€ÍŠÙ.
