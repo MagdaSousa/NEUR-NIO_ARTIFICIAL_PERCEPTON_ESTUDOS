@@ -1,62 +1,58 @@
-from objetivos_do_modelo.funcoes_para_testar_modelo import ObjetivoDoModelo
-from metodos_para_calculo_dos_pesos.calculo_dos_pesos import CalculoDosPesos
+from funcoes_para_ensinar_o_modelo.funcoes_para_testar_modelo import EnsinarModelo
+from calculo_dos_pesos.calculo_dos_pesos import CalculoDosPesos
+
+_PESOS_DO_MODELO_TREINADO = []
 
 
 class TreinoModelo:
-    def __init__(self):
-        self.sequencia_x1_x2_padrao = [[1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 0]]
-        self.valor_do_passo = 0.1
-        self.variacao_peso_1 = 0
-        self.variacao_peso_2 = 0
-        self.valor_calculado_de_saida =0
-        self.teste=[]
+    def __init__(self, nome_da_funcao, _SEQUENCIA_ENTRADA1_ENTRADA2_SAIDA, funcao_para_treino):
+        self.nome_da_funcao = nome_da_funcao
+        self.sequencial_para_ensinar_o_modelo = _SEQUENCIA_ENTRADA1_ENTRADA2_SAIDA
+        self.ensinar_modelo = EnsinarModelo()
+        self.calculo_dos_pesos = CalculoDosPesos()
+        self.funcao_para_treino = funcao_para_treino
 
     def valor_de_saida_do_modelo(self, entrada_1, variacao_peso_1, entrada_2, variacao_peso_2, bias):
+        """Calcula o valor de saída do modelo e chama o método calculo_da_saida_do_modelo,
+        para transformar o resultado em um valor binário para comparação"""
+
         resultado_do_modelo_no_momento = (entrada_1 * variacao_peso_1) + (entrada_2 * variacao_peso_2) + bias
-        return resultado_do_modelo_no_momento
+        return self.calculo_da_saida_do_modelo(resultado_do_modelo_no_momento)
 
     def calculo_da_saida_do_modelo(self, resultado_do_modelo_no_momento):
-
         if resultado_do_modelo_no_momento > 0:
-            return 0
-        else:
             return 1
+        else:
+            return 0
 
-    def sequencia_de_entradas_para_funcao_e(self):
-        # resultado_do_modelo_no_momento = 0
-        while self.variacao_peso_1 != "concluído":
-            for x in self.sequencia_x1_x2_padrao:
-                self.calculo_dos_pesos = CalculoDosPesos(self.valor_do_passo,
-                                                         x[0],
-                                                         x[1],
-                                                         self.variacao_peso_1,
-                                                         self.variacao_peso_2,
-                                                         x[2])
-                erro = self.calculo_dos_pesos.calculo_de_erro(self.valor_calculado_de_saida)
-                bias = self.calculo_dos_pesos.novo_bias(erro)
-                saida_do_modelo_no_momento = self.valor_de_saida_do_modelo(x[0],
-                                                                           self.variacao_peso_1,
-                                                                           x[1],
-                                                                           self.variacao_peso_2,
-                                                                           bias)
-                self.valor_calculado_de_saida = self.calculo_da_saida_do_modelo(saida_do_modelo_no_momento)
+    def treinar_modelo(self,funcao_para_treino):
+        """ treina o perceptrom de acordo com a função escolhida"""
+        bias = 1
+        peso1 = 1
+        peso2 = 1
+        for sequencia_de_teste in self.sequencial_para_ensinar_o_modelo:
+            resultado = False
+            entrada_1 = sequencia_de_teste[0]
+            entrada_2 = sequencia_de_teste[1]
+            padrao_de_saida_esperado = sequencia_de_teste[2]
+            contador_tentativas = 1
+            while resultado is False:
+                resultado_do_modelo_no_momento = self.valor_de_saida_do_modelo(entrada_1, peso1, entrada_2, peso2, bias)
+                resultado = eval(f' self.ensinar_modelo.{funcao_para_treino}{(entrada_1,entrada_2,padrao_de_saida_esperado,resultado_do_modelo_no_momento)}')
+                print(f"{30 * '='}\nTentativa  de número {contador_tentativas}\n{30 * '='}\n")
 
-                self.variacao_peso_1 = self.calculo_dos_pesos.calculo_variacao_peso1(erro)
-                self.variacao_peso_2 = self.calculo_dos_pesos.calculo_variacao_peso2(erro)
+                print(f"1ªEntrada->{entrada_1}\n2ªEntrada->{entrada_2}\n"
+                      f"Saída esperada->{padrao_de_saida_esperado}\n"
+                      f"Resultado do modelo->{resultado_do_modelo_no_momento}\n")
+                if resultado is True:
+                    continue
+                else:
+                    contador_tentativas += 1
+                    erro = self.calculo_dos_pesos.calculo_de_erro(padrao_de_saida_esperado,
+                                                                  resultado_do_modelo_no_momento)
+                    peso1 = self.calculo_dos_pesos.novo_peso1(erro, entrada_1, peso1)
+                    peso2 = self.calculo_dos_pesos.novo_peso2(erro, entrada_2, peso2)
+                    bias = self.calculo_dos_pesos.novo_bias(erro, bias)
+        _PESOS_DO_MODELO_TREINADO.append({f"Pesos obtidos, para realizar função{self.nome_da_funcao}": [peso1, peso2, bias]})
 
-                carregar_modelo = ObjetivoDoModelo(saida_do_modelo_no_momento,
-                                                   x[0],
-                                                   x[1],
-                                                   x[2],
-                                                   self.valor_do_passo,
-                                                   self.variacao_peso_1,
-                                                   self.variacao_peso_2)
-                quantidade_de_acertos_do_modelo = carregar_modelo.funcao_e(len(self.teste))
-
-                self.teste.append(quantidade_de_acertos_do_modelo)
-                self.variacao_peso_1, self.variacao_peso_2 = carregar_modelo.verificar_se_modelo_acertou(
-                    self.teste,
-                    bias,
-                    erro)
-                if self.variacao_peso_1 == "concluído":
-                    break
+        return print("modelo treinado com sucesso!!!! para função e")
