@@ -55,4 +55,4 @@ class TreinoModelo:
                     bias = self.calculo_dos_pesos.novo_bias(erro, bias)
         _PESOS_DO_MODELO_TREINADO.append({f"Pesos obtidos para {funcao_para_treino}": [peso1, peso2, bias]})
         gravar_no_txt(_PESOS_DO_MODELO_TREINADO)
-        return print("modelo treinado com sucesso!!!! para função e")
+        return print(f"modelo treinado com sucesso!!!! para {funcao_para_treino}")
