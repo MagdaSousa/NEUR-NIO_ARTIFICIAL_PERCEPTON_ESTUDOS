@@ -1,6 +1,6 @@
 from funcoes_para_ensinar_o_modelo.funcoes_para_testar_modelo import EnsinarModelo
 from calculo_dos_pesos.calculo_dos_pesos import CalculoDosPesos
-
+from resultados_do_treinamento.gravar_resultados import gravar_no_txt
 _PESOS_DO_MODELO_TREINADO = []
 
 
@@ -53,6 +53,6 @@ class TreinoModelo:
                     peso1 = self.calculo_dos_pesos.novo_peso1(erro, entrada_1, peso1)
                     peso2 = self.calculo_dos_pesos.novo_peso2(erro, entrada_2, peso2)
                     bias = self.calculo_dos_pesos.novo_bias(erro, bias)
-        _PESOS_DO_MODELO_TREINADO.append({f"Pesos obtidos, para realizar função{self.nome_da_funcao}": [peso1, peso2, bias]})
-
+        _PESOS_DO_MODELO_TREINADO.append({f"Pesos obtidos para {funcao_para_treino}": [peso1, peso2, bias]})
+        gravar_no_txt(_PESOS_DO_MODELO_TREINADO)
         return print("modelo treinado com sucesso!!!! para função e")
