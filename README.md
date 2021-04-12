@@ -13,3 +13,8 @@ no caso se X1=1 e X2=1, a saída esperada deverá ser 1, caso X1=0 e X2=1, a sa�
 
 
 
+
+
+
+
+
